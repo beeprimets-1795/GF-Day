@@ -9,6 +9,26 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
+  #musicBtn{
+position:fixed;
+bottom:20px;
+right:20px;
+padding:12px 20px;
+border:none;
+border-radius:50px;
+background:#ff4f8b;
+color:#fff;
+font-size:16px;
+cursor:pointer;
+box-shadow:0 10px 25px rgba(255,79,139,.4);
+transition:.3s;
+z-index:9999;
+}
+
+#musicBtn:hover{
+transform:scale(1.08);
+background:#ff2e73;
+}
 :root{
   --pink:#ffd9e4; --rose:#f7a8c0; --rose-deep:#e2769a; --white:#fffdfc;
   --cream:#fff6ec; --lavender:#e6dcff; --peach:#ffe0cc; --gold:#c9a06a;
@@ -253,8 +273,25 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border:0;border-radiu
   </div>
   <div class="row"><span style="font-size:.6rem;letter-spacing:.2em;color:#a8748c">VOL</span><input type="range" id="vol" min="0" max="100" value="55"></div>
   <div class="playlist" id="playlist"></div>
+  <audio id="bgMusic" preload="auto"></audio>
+
+<button id="musicBtn">🎵 Play Music</button>
 </div>
 <script>
+
+  const player=document.getElementById("bgMusic");
+
+player.src="music/Kadhaippoma-MassTamilan.io.mp3";
+
+document.getElementById("openLetter").addEventListener("click",async()=>{
+
+    try{
+        await player.play();
+    }catch(e){
+        console.log(e);
+    }
+
+});
 var $=function(s){return document.querySelector(s)};
 var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
 var rand=function(a,b){return a+Math.random()*(b-a)};
