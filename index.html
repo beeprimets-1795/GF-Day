@@ -9,26 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  #musicBtn{
-position:fixed;
-bottom:20px;
-right:20px;
-padding:12px 20px;
-border:none;
-border-radius:50px;
-background:#ff4f8b;
-color:#fff;
-font-size:16px;
-cursor:pointer;
-box-shadow:0 10px 25px rgba(255,79,139,.4);
-transition:.3s;
-z-index:9999;
-}
-
-#musicBtn:hover{
-transform:scale(1.08);
-background:#ff2e73;
-}
 :root{
   --pink:#ffd9e4; --rose:#f7a8c0; --rose-deep:#e2769a; --white:#fffdfc;
   --cream:#fff6ec; --lavender:#e6dcff; --peach:#ffe0cc; --gold:#c9a06a;
@@ -183,7 +163,18 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border:0;border-radiu
 @keyframes fall{to{transform:translateY(115vh) rotate(900deg);opacity:.15}}
 .rainheart{position:fixed;top:-40px;z-index:96;pointer-events:none;animation:fall linear forwards}
 .scrollhint{margin-top:34px;font-size:.66rem;letter-spacing:.4em;text-transform:uppercase;color:#a8748c;animation:floatY 2.6s ease-in-out infinite}
-@media (max-width:520px){#player{width:calc(100vw - 36px)}}
+@media (max-width:520px){
+  #player{right:10px;bottom:10px;width:190px;padding:9px 10px;border-radius:20px}
+  #player .now{font-size:.82rem;gap:6px}
+  #player .now .dot{width:6px;height:6px}
+  #player .row{margin-top:8px;gap:6px}
+  #player button{width:30px;height:30px;font-size:.78rem}
+  #player button.main{width:34px;height:34px}
+  #player .playlist{margin-top:6px;gap:3px}
+  #player .plitem{font-size:.78rem;padding:4px 8px;border-radius:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #player .eq{height:9px}
+}
+@media (max-width:360px){#player{width:165px}#player .now{font-size:.75rem}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -264,7 +255,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border:0;border-radiu
   </div>
 </div>
 <div id="player" class="glass">
-  <div class="now"><span class="dot"></span><span id="nowName">Kadhaipoma</span><span class="eq" id="eq" style="visibility:hidden"><i></i><i></i><i></i></span></div>
+  <div class="now"><span class="dot"></span><span id="nowName">Kadhaippoma</span><span class="eq" id="eq" style="visibility:hidden"><i></i><i></i><i></i></span></div>
   <div class="row">
     <button id="prev" title="Previous">&#9198;</button>
     <button class="main" id="play" title="Play / Pause">&#9654;</button>
@@ -273,25 +264,8 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border:0;border-radiu
   </div>
   <div class="row"><span style="font-size:.6rem;letter-spacing:.2em;color:#a8748c">VOL</span><input type="range" id="vol" min="0" max="100" value="55"></div>
   <div class="playlist" id="playlist"></div>
-  <audio id="bgMusic" preload="auto"></audio>
-
-<button id="musicBtn">🎵 Play Music</button>
 </div>
 <script>
-
-  const player=document.getElementById("bgMusic");
-
-player.src="music/Kadhaippoma-MassTamilan.io.mp3";
-
-document.getElementById("openLetter").addEventListener("click",async()=>{
-
-    try{
-        await player.play();
-    }catch(e){
-        console.log(e);
-    }
-
-});
 var $=function(s){return document.querySelector(s)};
 var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
 var rand=function(a,b){return a+Math.random()*(b-a)};
@@ -423,122 +397,42 @@ function burstAt(x,y,n){
     (function(el){setTimeout(function(){el.remove();},1500);})(p);
   }
 }
-var N={C3:130.81,D3:146.83,E3:164.81,F3:174.61,G3:196,A3:220,C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,B4:493.88,C5:523.25,D5:587.33,E5:659.25};
-// var SONGS=[
-//  {name:'Kadhaipoma',bpm:74,
-//   notes:[['E4',2],['G4',1],['A4',3],['G4',1],['E4',2],['D4',2],['C4',3],['R',1],['E4',2],['G4',1],['C5',3],['B4',1],['A4',2],['G4',2],['E4',4],['R',1],['A4',2],['C5',1],['D5',3],['C5',1],['A4',2],['G4',2],['E4',3],['D4',1],['C4',4],['R',2]],
-//   bass:['C3','A3','F3','G3']},
-//  {name:'Uyire Un Uyirena',bpm:66,
-//   notes:[['A4',2],['B4',1],['C5',3],['B4',1],['A4',2],['G4',2],['E4',4],['R',1],['G4',2],['A4',1],['B4',3],['C5',1],['D5',2],['C5',2],['A4',4],['R',1],['C5',2],['D5',1],['E5',3],['D5',1],['C5',2],['B4',2],['A4',4],['R',2]],
-//   bass:['A3','F3','C3','G3']}
-// ];
-var SONGS = [
-  {
-    name: "Kadhaipoma",
-    file: "music/Kadhaippoma-MassTamilan.io.mp3"
-  },
-  {
-    name: "Uyire Un Uyirena",
-    file: "music/Uyire-Un-Uyirena.mp3"
-  }
+var SONGS=[
+ {name:'Kadhaippoma', src:'music/Kadhaippoma.mp3'},
+ {name:'Uyire Un Uyirena', src:'music/Uyire-Un-Uyirena.mp3'}
 ];
-var ac=null,master=null,current=0,playing=false,audioReady=false,seq=null,stepIdx=0,muted=false,vol=.55;
+var audio=new Audio(); audio.preload='auto'; audio.volume=.55;
+var current=0, audioReady=false, muted=false;
 function buildPlaylist(){
   var pl=$('#playlist'); pl.innerHTML='';
   SONGS.forEach(function(s,i){
     var d=document.createElement('div');
     d.className='plitem'+(i===current?' active':'');
     d.textContent=(i+1)+'. '+s.name;
-    d.onclick=function(ev){ev.stopPropagation();current=i;restart();};
+    d.onclick=function(ev){ev.stopPropagation();current=i;loadAndPlay();};
     pl.appendChild(d);
   });
 }
-function ensureAudio() {
-    if (!window.audio) {
-        window.audio = new Audio();
-        window.audio.preload = "auto";
-        window.audio.volume = vol;
-    }
+function ui(on){ $('#play').innerHTML=on?'&#10074;&#10074;':'&#9654;'; $('#eq').style.visibility=on?'visible':'hidden'; }
+function loadAndPlay(){
+  var t=SONGS[current];
+  $('#nowName').textContent=t.name; buildPlaylist();
+  audio.src=t.src; audio.currentTime=0; play();
 }
-function note(freq,time,dur,type,gain){
-  var o=ac.createOscillator(), g=ac.createGain();
-  o.type=type||'sine'; o.frequency.value=freq;
-  g.gain.setValueAtTime(0,time);
-  g.gain.linearRampToValueAtTime(gain||.2,time+.04);
-  g.gain.exponentialRampToValueAtTime(.0008,time+dur);
-  o.connect(g); g.connect(master); o.start(time); o.stop(time+dur+.05);
-}
-function playStep(){
-  if(!playing)return;
-  var song=SONGS[current], beat=60/song.bpm/2;
-  var step=song.notes[stepIdx], nm=step[0], len=step[1];
-  var t=ac.currentTime+.02, dur=len*beat;
-  if(nm!=='R'){note(N[nm],t,dur*1.4,'sine',.2);note(N[nm]*2,t,dur*0.9,'triangle',.05);}
-  if(stepIdx%4===0){var b=song.bass[Math.floor(stepIdx/4)%song.bass.length];note(N[b],t,beat*4,'sine',.12);}
-  stepIdx=(stepIdx+1)%song.notes.length;
-  seq=setTimeout(playStep,dur*1000);
-}
-function startMusic(){ if(audioReady)return; audioReady=true; $('#player').classList.add('show'); ensureAudio(); play(); }
-function play() {
-
-    ensureAudio();
-
-    if (!window.audio.src || window.audio.src.indexOf(SONGS[current].file) === -1) {
-        window.audio.src = SONGS[current].file;
-    }
-
-    window.audio.volume = muted ? 0 : vol;
-
-    window.audio.play()
-        .then(() => {
-            playing = true;
-            $('#play').innerHTML = '&#10074;&#10074;';
-            $('#eq').style.visibility = 'visible';
-        })
-        .catch(err => {
-            console.error("Audio play failed:", err);
-        });
-
-    window.audio.onended = function () {
-        current = (current + 1) % SONGS.length;
-        restart();
-    };
-
-}
-function pause() {
-
-    if (window.audio) {
-        window.audio.pause();
-    }
-
-    playing = false;
-
-    $('#play').innerHTML = '&#9654;';
-
-    $('#eq').style.visibility = 'hidden';
-
-}
-function restart(){
-
-    playing = false;
-
-    audio.pause();
-
-    audio.currentTime = 0;
-
-    $('#nowName').textContent = SONGS[current].name;
-
-    buildPlaylist();
-
-    play();
-
-}
-$('#play').onclick=function(e){e.stopPropagation(); playing?pause():play();};
-$('#next').onclick=function(e){e.stopPropagation(); current=(current+1)%SONGS.length; restart();};
-$('#prev').onclick=function(e){e.stopPropagation(); current=(current-1+SONGS.length)%SONGS.length; restart();};
-$('#mute').onclick=function(e){e.stopPropagation(); muted=!muted;
-  if(master)master.gain.value=muted?0:vol; $('#mute').innerHTML=muted?'&#128263;':'&#128266;';};
-$('#vol').oninput=function(e){vol=e.target.value/100; if(master&&!muted)master.gain.value=vol;};
+function play(){ if(!audio.src){loadAndPlay();return;}
+  var p=audio.play(); if(p&&p.then)p.then(function(){ui(true);},function(){ui(false);}); }
+function pause(){ audio.pause(); ui(false); }
+function startMusic(){ if(audioReady)return; audioReady=true; $('#player').classList.add('show'); loadAndPlay(); }
+audio.addEventListener('ended',function(){current=(current+1)%SONGS.length;loadAndPlay();});
+audio.addEventListener('play',function(){ui(true);});
+audio.addEventListener('pause',function(){ui(false);});
+audio.addEventListener('error',function(){ui(false);});
+$('#play').onclick=function(e){e.stopPropagation(); audio.paused?play():pause();};
+$('#next').onclick=function(e){e.stopPropagation(); current=(current+1)%SONGS.length; loadAndPlay();};
+$('#prev').onclick=function(e){e.stopPropagation(); current=(current-1+SONGS.length)%SONGS.length; loadAndPlay();};
+$('#mute').onclick=function(e){e.stopPropagation(); muted=!muted; audio.muted=muted;
+  $('#mute').innerHTML=muted?'&#128263;':'&#128266;';};
+$('#vol').oninput=function(e){audio.volume=e.target.value/100;};
 $('#player').addEventListener('pointerdown',function(e){e.stopPropagation();});
 $('#nowName').textContent=SONGS[0].name; buildPlaylist();
 var no=$('#no');
@@ -627,13 +521,6 @@ function showEnding(){
   setInterval(function(){
     if(Math.random()<.6)burstAt(rand(60,window.innerWidth-60),rand(60,window.innerHeight*0.75),14);
   },1400);
-  audio.onended = function(){
-
-    current = (current + 1) % SONGS.length;
-
-    restart();
-
-};
 }
 </script>
 </body>
